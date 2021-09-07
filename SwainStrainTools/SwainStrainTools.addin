@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<RevitAddIns>
+
+  <AddIn Type="Application">
+    <Name>SwainStrainTools</Name>
+    <Assembly>SwainStrainTools.dll</Assembly>
+    <AddInId>
+      43EE5397-27CA-438D-AD42-2611B8BB055C
+    </AddInId>
+    <FullClassName>SwainStrainTools.ExternalApplication</FullClassName>
+    <VendorId>SwainStrain</VendorId>
+    <VendorDescription></VendorDescription>
+  </AddIn>
+
+</RevitAddIns>
