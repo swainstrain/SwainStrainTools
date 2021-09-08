@@ -3,6 +3,8 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Windows.Media.Imaging;
+using SwainStrainTools.UI;
+
 
 
 namespace SwainStrainTools
@@ -13,6 +15,8 @@ namespace SwainStrainTools
       public static Form_AddPipeInsulation MyForm_AddPipeInsulation;
       public System.Windows.Window Window = new System.Windows.Window();
 
+      public static ExternalEvent_AddPipeInsulation Handler { get; set; } = null;
+      public static ExternalEvent ExEvent { get; set; } = null;
 
       public Result OnStartup(UIControlledApplication application)
       {
@@ -30,6 +34,11 @@ namespace SwainStrainTools
          button1.LargeImage = bitmap1;
          button1.ToolTip = "Tool to add pipe insulation";
          panel.AddItem(button1);
+
+
+         //Handler = new ExternalEvent_AddPipeInsulation();
+         //ExEvent = ExternalEvent.Create(Handler);
+
 
          MyForm_AddPipeInsulation = null;
          thisApp = this;
@@ -50,7 +59,8 @@ namespace SwainStrainTools
       {
          ExternalEvent_AddPipeInsulation handler = new ExternalEvent_AddPipeInsulation();
          ExternalEvent exEvent = ExternalEvent.Create(handler);
-         MyForm_AddPipeInsulation = new Form_AddPipeInsulation(uiapp, exEvent, handler);
+         ViewModel vm = new ViewModel(uiapp);
+         MyForm_AddPipeInsulation = new Form_AddPipeInsulation(uiapp, exEvent, handler,vm);
          MyForm_AddPipeInsulation.Show();
       }
 

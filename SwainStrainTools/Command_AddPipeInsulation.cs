@@ -12,14 +12,21 @@ namespace SwainStrainTools
    {
       public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
       {
+         return Execute(commandData.Application);
+      }
+
+
+      public Result Execute(UIApplication uiapp)
+      {
          try
          {
-            ExternalApplication.thisApp.ShowForm_AddPipeInsulation(commandData.Application);
+            //var view = new Form_AddPipeInsulation(new UI.ViewModel(uiapp), ExternalApplication.Handler);
+            ExternalApplication.thisApp.ShowForm_AddPipeInsulation(uiapp);
             return Result.Succeeded;
          }
          catch (Exception ex)
          {
-            message = ex.Message;
+            System.Windows.Forms.MessageBox.Show("Error! " + ex);
             return Result.Failed;
          }
 

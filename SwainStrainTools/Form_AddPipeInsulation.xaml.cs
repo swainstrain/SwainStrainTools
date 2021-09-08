@@ -22,7 +22,7 @@ namespace SwainStrainTools
       public static string insulation;
       public static double thickness;
 
-      public Form_AddPipeInsulation(UIApplication uiApp, ExternalEvent exEvent, ExternalEvent_AddPipeInsulation handler)
+      public Form_AddPipeInsulation(UIApplication uiApp, ExternalEvent exEvent, ExternalEvent_AddPipeInsulation handler, UI.ViewModel vm)
       {
          InitializeComponent();
          _uiapp = uiApp;
@@ -33,37 +33,39 @@ namespace SwainStrainTools
          m_ExEvent = exEvent;
          m_Handler = handler;
 
-         List<string> ins = new List<string>();
-         List<string> sys = new List<string>();
+         this.DataContext = vm;
+
+         //List<string> ins = new List<string>();
+         //List<string> sys = new List<string>();
 
 
-         List<Element> insulations = new FilteredElementCollector(_doc)
-            .WhereElementIsElementType()
-            .OfCategory(BuiltInCategory.OST_PipeInsulations)
-            .ToList<Element>();
+         //List<Element> insulations = new FilteredElementCollector(_doc)
+         //   .WhereElementIsElementType()
+         //   .OfCategory(BuiltInCategory.OST_PipeInsulations)
+         //   .ToList<Element>();
 
-         var systems = new FilteredElementCollector(_doc)
-            .WhereElementIsElementType()
-            .OfCategory(BuiltInCategory.OST_PipingSystem)
-            .ToList<Element>();
+         //var systems = new FilteredElementCollector(_doc)
+         //   .WhereElementIsElementType()
+         //   .OfCategory(BuiltInCategory.OST_PipingSystem)
+         //   .ToList<Element>();
 
 
-         foreach (Element i in insulations)
-         {
-            ElementType type = i as ElementType;
-            ins.Add(i.Name);
-         }
+         //foreach (Element i in insulations)
+         //{
+         //   ElementType type = i as ElementType;
+         //   ins.Add(i.Name);
+         //}
 
-         foreach (var s in systems)
-         {
-            sys.Add(s.Name);
-         }
+         //foreach (var s in systems)
+         //{
+         //   sys.Add(s.Name);
+         //}
 
-         ins.Sort();
-         sys.Sort();
+         //ins.Sort();
+         //sys.Sort();
 
-         CMB_insulations.ItemsSource = ins;
-         CMB_systems.ItemsSource = sys;
+         //CMB_insulations.ItemsSource = ins;
+         //CMB_systems.ItemsSource = sys;
 
       }
 
