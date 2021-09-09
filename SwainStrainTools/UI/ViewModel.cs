@@ -190,15 +190,21 @@ namespace SwainStrainTools.UI
 
             List<DiameterNominal> returnDNs = new List<DiameterNominal>();
 
-            int i = 0;
+            List<string> diameters = new List<string>();
+
             foreach (var c in pipes)
             {
                string pipeDN = c.get_Parameter(BuiltInParameter.RBS_PIPE_DIAMETER_PARAM).AsValueString();
-               returnDNs.Add(new DiameterNominal() { PipeSystemName = pipeSystemName, DN = pipeDN });
-               i++;
+
+               if(!diameters.Contains(pipeDN))
+               {
+                  diameters.Add(pipeDN);
+                  returnDNs.Add(new DiameterNominal() { PipeSystemName = pipeSystemName, DN = pipeDN });
+               }
+
             }
 
-            returnDNs.Sort();
+            //returnDNs.Sort();
 
             return returnDNs;
          }
