@@ -4,6 +4,7 @@ using Autodesk.Revit.DB.Plumbing;
 using Autodesk.Revit.UI;
 using System;
 using System.Linq;
+using SwainStrainTools.UI;
 
 namespace SwainStrainTools
 {
@@ -34,7 +35,7 @@ namespace SwainStrainTools
 
                t.Commit();
 
-               t.Start("Add Insulation to fittings");
+               t.Start("Add Insulation to pipe fittings");
                foreach (var p in Form_AddPipeInsulation.pipefittings)
                {
                   PipeInsulation pipeInsulation = PipeInsulation.Create(doc, p.Id, insulation.Id, thickness);
@@ -56,7 +57,7 @@ namespace SwainStrainTools
 
       public string GetName()
       {
-         return "External Event";
+         return "External Event - Add Pipe Insulation";
       }
    }
 }

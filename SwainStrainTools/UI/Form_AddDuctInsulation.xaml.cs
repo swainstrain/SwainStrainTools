@@ -4,27 +4,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 
-namespace SwainStrainTools
+namespace SwainStrainTools.UI
 {
-
-   public partial class Form_AddPipeInsulation : Window
+   /// <summary>
+   /// Interaction logic for UserControl1.xaml
+   /// </summary>
+   public partial class Form_AddDuctInsulation : Window
    {
       private ExternalEvent m_ExEvent;
-      private ExternalEvent_AddPipeInsulation m_Handler;
+      private ExternalEvent_AddDuctInsulation m_Handler;
 
       UIApplication _uiapp;
       UIDocument _uidoc;
       Autodesk.Revit.ApplicationServices.Application _app;
       Document _doc;
 
-      public static IList<Element> pipes;
-      public static IList<Element> pipefittings;
+      public static IList<Element> ducts;
+      public static IList<Element> ductfittings;
       public static string insulation;
       public static double thickness;
 
-      public Form_AddPipeInsulation(UIApplication uiApp, ExternalEvent exEvent, ExternalEvent_AddPipeInsulation handler, UI.ViewModel vm)
+      public Form_AddDuctInsulation(UIApplication uiApp, ExternalEvent exEvent, ExternalEvent_AddDuctInsulation handler, ViewModel_AddDuctIns vm)
       {
          InitializeComponent();
+
          _uiapp = uiApp;
          _uidoc = uiApp.ActiveUIDocument;
          _app = _uiapp.Application;
@@ -36,18 +39,11 @@ namespace SwainStrainTools
          this.DataContext = vm;
 
          List<string> ins = new List<string>();
-         //List<string> sys = new List<string>();
-
 
          List<Element> insulations = new FilteredElementCollector(_doc)
             .WhereElementIsElementType()
-            .OfCategory(BuiltInCategory.OST_PipeInsulations)
+            .OfCategory(BuiltInCategory.OST_DuctInsulations)
             .ToList<Element>();
-
-         //var systems = new FilteredElementCollector(_doc)
-         //   .WhereElementIsElementType()
-         //   .OfCategory(BuiltInCategory.OST_PipingSystem)
-         //   .ToList<Element>();
 
          foreach (Element i in insulations)
          {
@@ -55,22 +51,15 @@ namespace SwainStrainTools
             ins.Add(i.Name);
          }
 
-         //foreach (var s in systems)
-         //{
-         //   sys.Add(s.Name);
-         //}
-
          ins.Sort();
-         //sys.Sort();
 
          CMB_insulations.ItemsSource = ins;
-         //CMB_systems.ItemsSource = sys;
+
       }
 
       private void OKBtn_Click(object sender, RoutedEventArgs e)
       {
          string system = CMB_systems.Text;
-         string diameter = CMB_DN.Text;
          insulation = CMB_insulations.Text;
          thickness = double.Parse(TXT_thickness.Text.ToString());
 
@@ -87,35 +76,24 @@ namespace SwainStrainTools
          }
 
          ElementParameterFilter filter = new ElementParameterFilter(ParameterFilterRuleFactory
-             .CreateEqualsRule(new ElementId(BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM)
+             .CreateEqualsRule(new ElementId(BuiltInParameter.RBS_DUCT_SYSTEM_TYPE_PARAM)
              , system
              , false));
 
-         IList<Element> allpipes= new FilteredElementCollector(_doc)
+         ducts = new FilteredElementCollector(_doc)
              .WhereElementIsNotElementType()
-             .OfCategory(BuiltInCategory.OST_PipeCurves)
+             .OfCategory(BuiltInCategory.OST_DuctCurves)
              .WherePasses(filter)
              .ToElements();
 
-         IList<Element> allfittings = new FilteredElementCollector(_doc)
+         ductfittings = new FilteredElementCollector(_doc)
              .WhereElementIsNotElementType()
-             .OfCategory(BuiltInCategory.OST_PipeFitting)
+             .OfCategory(BuiltInCategory.OST_DuctFitting)
              .WherePasses(filter)
              .ToElements();
 
-
-         pipes = new List<Element>();
-         pipefittings = new List<Element>();
-
-         foreach (var p in allpipes) if (p.get_Parameter(BuiltInParameter.RBS_PIPE_DIAMETER_PARAM).AsValueString() == diameter)
-            {
-               pipes.Add(p);
-            }
-
-         foreach (var p in allpipes) if (p.get_Parameter(BuiltInParameter.RBS_PIPE_DIAMETER_PARAM).AsValueString() == diameter)
-            {
-               pipefittings.Add(p);
-            }
+         //TaskDialog.Show("ducts", ducts.Count.ToString());
+         //TaskDialog.Show("ductfittings", ductfittings.Count.ToString());
 
          m_ExEvent.Raise();
       }
@@ -124,5 +102,6 @@ namespace SwainStrainTools
       {
          Close();
       }
+
    }
 }

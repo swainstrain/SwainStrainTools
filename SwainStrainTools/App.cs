@@ -13,6 +13,7 @@ namespace SwainStrainTools
    {
       public static ExternalApplication thisApp = new ExternalApplication();
       public static Form_AddPipeInsulation MyForm_AddPipeInsulation;
+      public static Form_AddDuctInsulation MyForm_AddDuctInsulation;
       public System.Windows.Window Window = new System.Windows.Window();
 
       public static ExternalEvent_AddPipeInsulation Handler { get; set; } = null;
@@ -35,12 +36,8 @@ namespace SwainStrainTools
          button1.ToolTip = "Tool to add pipe insulation";
          panel.AddItem(button1);
 
-
-         //Handler = new ExternalEvent_AddPipeInsulation();
-         //ExEvent = ExternalEvent.Create(Handler);
-
-
          MyForm_AddPipeInsulation = null;
+         MyForm_AddDuctInsulation = null;
          thisApp = this;
          return Result.Succeeded;
       }
@@ -59,9 +56,18 @@ namespace SwainStrainTools
       {
          ExternalEvent_AddPipeInsulation handler = new ExternalEvent_AddPipeInsulation();
          ExternalEvent exEvent = ExternalEvent.Create(handler);
-         ViewModel vm = new ViewModel(uiapp);
+         ViewModel_AddPipeIns vm = new ViewModel_AddPipeIns(uiapp);
          MyForm_AddPipeInsulation = new Form_AddPipeInsulation(uiapp, exEvent, handler,vm);
          MyForm_AddPipeInsulation.Show();
+      }
+
+      public void ShowForm_AddDuctInsulation(UIApplication uiapp)
+      {
+         ExternalEvent_AddDuctInsulation handler = new ExternalEvent_AddDuctInsulation();
+         ExternalEvent exEvent = ExternalEvent.Create(handler);
+         ViewModel_AddDuctIns vm = new ViewModel_AddDuctIns(uiapp);
+         MyForm_AddDuctInsulation = new Form_AddDuctInsulation(uiapp, exEvent, handler, vm);
+         MyForm_AddDuctInsulation.Show();
       }
 
       public static BitmapSource GetEmbeddedImage(string name)
