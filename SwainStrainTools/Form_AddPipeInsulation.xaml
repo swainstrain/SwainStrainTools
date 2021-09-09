@@ -59,38 +59,36 @@
             Height='30'
             VerticalAlignment='Top' />
 
+         <StackPanel
+            Height='30'
+            Orientation="Horizontal"
+            Margin="0,25,0,0"
+            VerticalAlignment='Top'>
+
+            <Label
+               VerticalAlignment="Center"
+               Margin='0,0,10,0'
+               Content="Thickness:" />
+
+            <TextBox
+               x:Name='TXT_thickness'
+               TextWrapping='Wrap'
+               Height='22'
+               HorizontalContentAlignment="Right"
+               VerticalContentAlignment="Center"
+               VerticalAlignment='Center'
+               Text='0'
+               Width='58' />
+
+            <Label
+               VerticalAlignment="Bottom"
+               Content="mm"
+               Height="28" />
+
+         </StackPanel>
+
       </StackPanel>
 
-      <DockPanel
-         Margin='10,240,10,0'
-         Height='30'
-         VerticalAlignment='Top'>
-
-         <Label
-            DockPanel.Dock="Left"
-            VerticalAlignment="Center"
-            Margin='0,0,10,0'
-            Content="Thickness:" />
-
-         <TextBox
-            DockPanel.Dock="Left"
-            x:Name='TXT_thickness'
-            TextWrapping='Wrap'
-            Height='22'
-            HorizontalContentAlignment="Right"
-            VerticalContentAlignment="Center"
-            VerticalAlignment='Center'
-            Text='0'
-            Width='58'
-            Margin="0,4" />
-
-         <Label
-            DockPanel.Dock="Left"
-            VerticalAlignment="Bottom"
-            Content="mm"
-            Height="28" />
-
-      </DockPanel>
 
       <Button
          x:Name='OKBtn'
