@@ -7,16 +7,15 @@
    xmlns:local="clr-namespace:SwainStrainTools"
    mc:Ignorable="d"
    Title="Add Pipe Insulation"
-   Height="413.424"
+   Height="370"
    Width="300"
    Topmost="True"
    MinWidth='300'>
 
-   <Grid
-      Margin='0,0,0,0'>
-      
+   <Grid>
+
       <StackPanel
-         Margin="10,10,10.333,310">
+         Margin="10">
          <Label
             Content='Pipe System'
             Height='30'
@@ -32,16 +31,14 @@
             VerticalAlignment='Top'
             VerticalContentAlignment="Center" />
 
-      </StackPanel>
-
-      <StackPanel
-         Margin="10,90,10,210">
          <Label
             Content='Pipe DN'
+            Margin="0,10,0,0"
             Height='30'
             VerticalAlignment='Top' />
          <ComboBox
             x:Name="CMB_DN"
+            IsEnabled="{Binding AllowDNSelection}"
             ItemsSource="{Binding DNList}"
             DisplayMemberPath="DN"
             SelectedValue="{Binding SelectedDN}"
@@ -50,17 +47,14 @@
             VerticalAlignment='Top'
             VerticalContentAlignment="Center" />
 
-      </StackPanel>
-
-      <StackPanel
-         Margin="10,191,10.333,128">
-
          <Label
             Content='Pipe Insulation'
             Height='30'
+            Margin="0,10,0,0"
             VerticalAlignment='Top' />
          <ComboBox
             x:Name="CMB_insulations"
+            IsEnabled="{Binding AllowInsulationSelection}"
             VerticalContentAlignment="Center"
             Height='30'
             VerticalAlignment='Top' />
@@ -68,7 +62,7 @@
       </StackPanel>
 
       <DockPanel
-         Margin='10,275,10.333,0'
+         Margin='10,240,10,0'
          Height='30'
          VerticalAlignment='Top'>
 
@@ -93,7 +87,8 @@
          <Label
             DockPanel.Dock="Left"
             VerticalAlignment="Bottom"
-            Content="mm" />
+            Content="mm"
+            Height="28" />
 
       </DockPanel>
 

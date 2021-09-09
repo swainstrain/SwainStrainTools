@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Windows;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
@@ -21,9 +20,6 @@ namespace SwainStrainTools.UI
       //Private properties
       private static UIApplication _uiapp = null;
       private static Document _doc = null;
-      //private Autodesk.Revit.DB.Color rvtColorElement;
-      //private ComponentOption selectOption = ComponentOption.OnlyVisible;
-      //private ColorHandler _handler = null;
       private List<PipeSystem> _PipeSystemsList;
       private string _SelectedPipeSystem;
       private List<DiameterNominal> _DNList;
@@ -32,14 +28,11 @@ namespace SwainStrainTools.UI
 
       // Public Properties - Used for binding with the View
 
-      //public Autodesk.Revit.DB.Color RvtColorElement { get { return rvtColorElement; } set { rvtColorElement = value; OnPropertyChanged(); } }
-      //public ComponentOption SelectOption { get { return selectOption; } set { selectOption = value; OnPropertyChanged(); } }
       public static ViewModel Instance { get; set; }
       public static Document Doc { get { return _doc; } set { _doc = value; } }
       public static UIApplication Uiapp { get { return _uiapp; } set { _uiapp = value; } }
       public static bool IsOpen { get; private set; } = false;
 
-      //public static ColorSettings _ColorSettings { get; set; }
       public static string ColorSettingsFiles = string.Empty;
 
       public List<PipeSystem> PipeSystemsList
@@ -80,9 +73,19 @@ namespace SwainStrainTools.UI
          {
             _SelectedDN = value;
             OnPropertyChanged("SelectedDN");
-            OnPropertyChanged("AllowTypeSelection"); // Trigger Enable/Disable UI element when particular state is selected
-            //getTypeList(); // Generate a new list of cities based on a selected state
+            OnPropertyChanged("AllowInsulationSelection");
+            //getTypeList(); // 
          }
+      }
+
+      public bool AllowDNSelection
+      {
+         get { return (SelectedPipeSystem != null); }
+      }
+
+      public bool AllowInsulationSelection
+      {
+         get { return (SelectedDN != null); }
       }
 
       public ViewModel(UIApplication uiapp)
@@ -90,7 +93,6 @@ namespace SwainStrainTools.UI
          Instance = this;
          _uiapp = uiapp;
          _doc = _uiapp.ActiveUIDocument.Document;
-         //_handler = handler;
 
          // Instantiate, get a list of countries from the Model
          PipeSystem _Category = new PipeSystem();
@@ -100,8 +102,6 @@ namespace SwainStrainTools.UI
          {
             WindowLoaded = new RelayCommand(param => this.LoadedExecuted(param));
             WindowClosed = new RelayCommand(param => this.ClosedExecuted(param));
-            //ColorSettingsElement = new RelayCommand(param => this.ColorElementExecuted(param));
-            //ApplyCommand = new RelayCommand(param => this.ApplyExecuted(param));
             CancelCommand = new RelayCommand(param => this.CancelExecuted(param));
          }
          catch (Exception ex)
@@ -204,9 +204,9 @@ namespace SwainStrainTools.UI
 
             }
 
-            //returnDNs.Sort();
+            List<DiameterNominal> SortedList = returnDNs.OrderBy(o => int.Parse(o.DN.Replace(" mm",""))).ToList();
 
-            return returnDNs;
+            return SortedList;
          }
 
       }
@@ -226,42 +226,6 @@ namespace SwainStrainTools.UI
          var win = param as Window;
          win.Close();
       }
-
-      ////Raise methos when click apply button
-      //private void ApplyExecuted(object param)
-      //{
-      //   _handler.ViewModel = this;
-      //   //ExternalApplication.Handler.Request.Make(ColorHandler.RequestId.SetColor);
-      //   ExternalApplication.ExEvent.Raise();
-      //   //ExternalApplication.SetFocusToRevit();
-      //}
-
-      ////Get colorSetting from color selected
-      //private void ColorElementExecuted(object param)
-      //{
-      //   //Model.ColorSettings();
-      //   ColorSelectionDialog colorSelectionDialog = new ColorSelectionDialog();
-      //   colorSelectionDialog.Show();
-      //   RvtColorElement = colorSelectionDialog.SelectedColor;
-      //   _ColorSettings.ColorElement = RvtColorElement;
-      //}
-
-      //#endregion
-
-      //#region Private method
-      //private void CollectSettingsJson()
-      //{
-      //   ColorSettingsFiles = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\ColorSettings.json";
-      //   _ColorSettings = JsonUtils.Load<ColorSettings>(ColorSettingsFiles);
-
-      //   //Get Color Revit form color defaut of wpf
-      //   var cNewElement = System.Drawing.Color.Red; //defaut Red color
-      //   RvtColorElement = _ColorSettings.ColorElement ?? new Autodesk.Revit.DB.Color(cNewElement.R, cNewElement.G, cNewElement.B);
-
-      //}
-      //#endregion
-
-
 
    }
 }

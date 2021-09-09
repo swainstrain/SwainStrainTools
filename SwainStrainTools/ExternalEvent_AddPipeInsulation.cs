@@ -24,9 +24,9 @@ namespace SwainStrainTools
 
          try
          {
-            using (Transaction t = new Transaction(doc, "Add Insulation"))
+            using (Transaction t = new Transaction(doc))
             {
-               t.Start();
+               t.Start("Add Insulation to pipes");
                foreach (Pipe p in Form_AddPipeInsulation.pipes)
                {
                   PipeInsulation pipeInsulation = PipeInsulation.Create(doc, p.Id, insulation.Id, thickness);
@@ -34,7 +34,7 @@ namespace SwainStrainTools
 
                t.Commit();
 
-               t.Start();
+               t.Start("Add Insulation to fittings");
                foreach (var p in Form_AddPipeInsulation.pipefittings)
                {
                   PipeInsulation pipeInsulation = PipeInsulation.Create(doc, p.Id, insulation.Id, thickness);
