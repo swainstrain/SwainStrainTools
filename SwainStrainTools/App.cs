@@ -29,7 +29,7 @@ namespace SwainStrainTools
          //Create Buttons
          PushButtonData button1 = new PushButtonData("Button1", "Add Pipe" + Environment.NewLine + "  Insulation  ", path, "SwainStrainTools.Command_AddPipeInsulation");
 
-         BitmapSource bitmap1 = GetEmbeddedImage("SwainStrainTools.Images.insulation.png");
+         BitmapSource bitmap1 = GetEmbeddedImage("SwainStrainTools.Images.insulation2.png");
          button1.Image = bitmap1;
          button1.LargeImage = bitmap1;
          button1.ToolTip = "Tool to add pipe insulation";
