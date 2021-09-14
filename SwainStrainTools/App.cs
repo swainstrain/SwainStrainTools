@@ -35,11 +35,6 @@ namespace SwainStrainTools
          button1.ToolTip = "Tool to add pipe insulation";
          panel.AddItem(button1);
 
-
-         //Handler = new ExternalEvent_AddPipeInsulation();
-         //ExEvent = ExternalEvent.Create(Handler);
-
-
          MyForm_AddPipeInsulation = null;
          thisApp = this;
          return Result.Succeeded;
@@ -53,7 +48,6 @@ namespace SwainStrainTools
          }
          return Result.Succeeded;
       }
-
 
       public void ShowForm_AddPipeInsulation(UIApplication uiapp)
       {

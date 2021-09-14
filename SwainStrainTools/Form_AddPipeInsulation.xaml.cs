@@ -17,8 +17,8 @@ namespace SwainStrainTools
       Autodesk.Revit.ApplicationServices.Application _app;
       Document _doc;
 
-      public static IList<Element> pipes;
-      public static IList<Element> pipefittings;
+      public static List<Element> pipes = new List<Element>();
+      public static List<Element> pipefittings = new List<Element>();
       public static string insulation;
       public static double thickness;
 
@@ -44,27 +44,15 @@ namespace SwainStrainTools
             .OfCategory(BuiltInCategory.OST_PipeInsulations)
             .ToList<Element>();
 
-         //var systems = new FilteredElementCollector(_doc)
-         //   .WhereElementIsElementType()
-         //   .OfCategory(BuiltInCategory.OST_PipingSystem)
-         //   .ToList<Element>();
-
          foreach (Element i in insulations)
          {
             ElementType type = i as ElementType;
             ins.Add(i.Name);
          }
 
-         //foreach (var s in systems)
-         //{
-         //   sys.Add(s.Name);
-         //}
-
          ins.Sort();
-         //sys.Sort();
 
          CMB_insulations.ItemsSource = ins;
-         //CMB_systems.ItemsSource = sys;
       }
 
       private void OKBtn_Click(object sender, RoutedEventArgs e)
@@ -91,7 +79,7 @@ namespace SwainStrainTools
              , system
              , false));
 
-         IList<Element> allpipes= new FilteredElementCollector(_doc)
+         IList<Element> allpipes = new FilteredElementCollector(_doc)
              .WhereElementIsNotElementType()
              .OfCategory(BuiltInCategory.OST_PipeCurves)
              .WherePasses(filter)
@@ -103,19 +91,26 @@ namespace SwainStrainTools
              .WherePasses(filter)
              .ToElements();
 
-
-         pipes = new List<Element>();
-         pipefittings = new List<Element>();
-
          foreach (var p in allpipes) if (p.get_Parameter(BuiltInParameter.RBS_PIPE_DIAMETER_PARAM).AsValueString() == diameter)
             {
                pipes.Add(p);
             }
 
-         foreach (var p in allpipes) if (p.get_Parameter(BuiltInParameter.RBS_PIPE_DIAMETER_PARAM).AsValueString() == diameter)
+         foreach (var p in allfittings) 
+         {
+            try
             {
-               pipefittings.Add(p);
+               if (p.LookupParameter("Nominal Diameter").AsValueString() == diameter)
+               {
+                  pipefittings.Add(p);
+               }
+
             }
+            catch
+            {
+
+            }
+         }
 
          m_ExEvent.Raise();
       }

@@ -3,6 +3,7 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Plumbing;
 using Autodesk.Revit.UI;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SwainStrainTools
@@ -27,9 +28,25 @@ namespace SwainStrainTools
             using (Transaction t = new Transaction(doc))
             {
                t.Start("Add Insulation to pipes");
+
+               List<ElementId> pinsidtodelete = new List<ElementId>();
+               List<ElementId> ptoreinsulate = new List<ElementId>();
+
                foreach (Pipe p in Form_AddPipeInsulation.pipes)
                {
-                  PipeInsulation pipeInsulation = PipeInsulation.Create(doc, p.Id, insulation.Id, thickness);
+                  try
+                  {
+                     PipeInsulation pipeInsulation = PipeInsulation.Create(doc, p.Id, insulation.Id, thickness);
+                  }
+                  catch
+                  {
+                     foreach (var f in PipeInsulation.GetInsulationIds(doc, p.Id))
+                     {
+                        pinsidtodelete.Add(f);
+                     }
+
+                     ptoreinsulate.Add(p.Id);
+                  }
                }
 
                t.Commit();
@@ -37,10 +54,44 @@ namespace SwainStrainTools
                t.Start("Add Insulation to fittings");
                foreach (var p in Form_AddPipeInsulation.pipefittings)
                {
-                  PipeInsulation pipeInsulation = PipeInsulation.Create(doc, p.Id, insulation.Id, thickness);
+                  try
+                  {
+                     PipeInsulation pipeInsulation = PipeInsulation.Create(doc, p.Id, insulation.Id, thickness);
+                  }
+                  catch
+                  {
+                     foreach (var f in PipeInsulation.GetInsulationIds(doc, p.Id))
+                     {
+                        pinsidtodelete.Add(f);
+                     }
+
+                     ptoreinsulate.Add(p.Id);
+                  }
+
                }
 
                t.Commit();
+
+
+               if (pinsidtodelete.Count > 0)
+               {
+                  t.Start("Override pipe insulation");
+
+                  doc.Delete(pinsidtodelete);
+
+                  foreach (var p in ptoreinsulate)
+                  {
+                     try
+                     {
+                        PipeInsulation pipeInsulation = PipeInsulation.Create(doc, p, insulation.Id, thickness);
+                     }
+                     catch
+                     {
+
+                     }
+                  }
+                  t.Commit();
+               }
 
             }
 

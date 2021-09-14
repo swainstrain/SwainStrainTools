@@ -20,7 +20,6 @@ namespace SwainStrainTools
       {
          try
          {
-            //var view = new Form_AddPipeInsulation(new UI.ViewModel(uiapp), ExternalApplication.Handler);
             ExternalApplication.thisApp.ShowForm_AddPipeInsulation(uiapp);
             return Result.Succeeded;
          }
