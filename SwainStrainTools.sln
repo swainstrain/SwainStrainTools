@@ -7,10 +7,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwainStrainTools", "SwainSt
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		19_20|Any CPU = 19_20|Any CPU
+		21_22|Any CPU = 21_22|Any CPU
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{27D503FE-C14F-4389-92B8-699A7BDFB276}.19_20|Any CPU.ActiveCfg = 19_20|Any CPU
+		{27D503FE-C14F-4389-92B8-699A7BDFB276}.19_20|Any CPU.Build.0 = 19_20|Any CPU
+		{27D503FE-C14F-4389-92B8-699A7BDFB276}.21_22|Any CPU.ActiveCfg = 21_22|Any CPU
+		{27D503FE-C14F-4389-92B8-699A7BDFB276}.21_22|Any CPU.Build.0 = 21_22|Any CPU
 		{27D503FE-C14F-4389-92B8-699A7BDFB276}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{27D503FE-C14F-4389-92B8-699A7BDFB276}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{27D503FE-C14F-4389-92B8-699A7BDFB276}.Release|Any CPU.ActiveCfg = Release|Any CPU

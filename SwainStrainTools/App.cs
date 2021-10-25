@@ -22,19 +22,26 @@ namespace SwainStrainTools
       public Result OnStartup(UIControlledApplication application)
       {
          //Create Ribbon Tab & Panel
-         //application.CreateRibbonTab("SwainStrain");
-         RibbonPanel panel = application.CreateRibbonPanel("Tools");
+         application.CreateRibbonTab("SwainStrain");
+         RibbonPanel panel = application.CreateRibbonPanel("SwainStrain","Insulation");
          string path = Assembly.GetExecutingAssembly().Location;
          var directory = Path.GetDirectoryName(path);
 
          //Create Buttons
          PushButtonData button1 = new PushButtonData("Button1", "Add Pipe" + Environment.NewLine + "  Insulation  ", path, "SwainStrainTools.Command_AddPipeInsulation");
+         PushButtonData button2 = new PushButtonData("Button2", "Add Duct" + Environment.NewLine + "  Insulation  ", path, "SwainStrainTools.Command_AddDuctInsulation");
 
-         BitmapSource bitmap1 = GetEmbeddedImage("SwainStrainTools.Images.insulation2.png");
+         BitmapSource bitmap1 = GetEmbeddedImage("SwainStrainTools.Images.insulationpipe.png");
          button1.Image = bitmap1;
          button1.LargeImage = bitmap1;
          button1.ToolTip = "Tool to add pipe insulation";
          panel.AddItem(button1);
+
+         BitmapSource bitmap2 = GetEmbeddedImage("SwainStrainTools.Images.insulationduct.png");
+         button2.Image = bitmap2;
+         button2.LargeImage = bitmap2;
+         button2.ToolTip = "Tool to add duct insulation";
+         panel.AddItem(button2);
 
          MyForm_AddPipeInsulation = null;
          MyForm_AddDuctInsulation = null;

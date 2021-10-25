@@ -14,7 +14,7 @@ namespace SwainStrainTools
       {
          try
          {
-            ExternalApplication.thisApp.ShowForm_AddPipeInsulation(uiapp);
+            ExternalApplication.thisApp.ShowForm_AddPipeInsulation(commandData.Application);
             return Result.Succeeded;
          }
          catch (Exception ex)

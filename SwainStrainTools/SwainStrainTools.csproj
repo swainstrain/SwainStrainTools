@@ -34,14 +34,30 @@
   <PropertyGroup>
     <ApplicationManifest>SwainStrainTools.addin</ApplicationManifest>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '19_20|AnyCPU' ">
+    <OutputPath>bin\2019_2020\</OutputPath>
+    <DefineConstants>R2019_2020</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '21_22|AnyCPU' ">
+    <OutputPath>bin\2021_2022\</OutputPath>
+    <DefineConstants>R2021_2022</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="RevitAPI">
+    <Reference Include="RevitAPI" Condition="'$(Configuration)|$(Platform)' == '19_20|AnyCPU'">
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Revit 2019\RevitAPI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="RevitAPI" Condition="'$(Configuration)|$(Platform)' == '21_22|AnyCPU'">
       <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Revit 2021\RevitAPI.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="RevitAPIUI">
+    <Reference Include="RevitAPIUI" Condition="'$(Configuration)|$(Platform)' == '19_20|AnyCPU'">
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Revit 2019\RevitAPIUI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="RevitAPIUI" Condition="'$(Configuration)|$(Platform)' == '21_22|AnyCPU'">
       <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Revit 2021\RevitAPIUI.dll</HintPath>
       <Private>False</Private>
     </Reference>
@@ -79,7 +95,8 @@
   <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Images\insulation.png" />
-    <EmbeddedResource Include="Images\insulation2.png" />
+    <EmbeddedResource Include="Images\insulationpipe.png" />
+    <EmbeddedResource Include="Images\insulationduct.png" />
     <Content Include="SwainStrainTools.addin" />
   </ItemGroup>
   <ItemGroup>

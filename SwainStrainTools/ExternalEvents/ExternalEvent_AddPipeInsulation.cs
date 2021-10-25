@@ -16,13 +16,32 @@ namespace SwainStrainTools
       {
          UIDocument uidoc = app.ActiveUIDocument;
          Document doc = uidoc.Document;
+         var version = app.Application.VersionName;
 
          PipeInsulationType insulation = new FilteredElementCollector(doc)
             .OfClass(typeof(PipeInsulationType))
              .First(x => x.Name == Form_AddPipeInsulation.insulation)
              as PipeInsulationType;
 
-         double thickness = UnitUtils.ConvertToInternalUnits(Form_AddPipeInsulation.thickness, UnitTypeId.Millimeters);         
+         double thickness = new double();
+
+#if R2021_2022
+         ForgeTypeId unitType = SpecTypeId.PipeInsulationThickness;
+         Units units = doc.GetUnits();
+         FormatOptions fo = units.GetFormatOptions(unitType);
+         var dis = fo.GetUnitTypeId();
+
+         thickness = UnitUtils.ConvertToInternalUnits(Form_AddPipeInsulation.thickness, dis);
+
+#else
+         UnitType unitType = UnitType.UT_PipeInsulationThickness;
+         Units units = doc.GetUnits();
+         FormatOptions fo = units.GetFormatOptions(unitType);
+         DisplayUnitType dis = fo.DisplayUnits;
+
+         thickness = UnitUtils.ConvertToInternalUnits(Form_AddPipeInsulation.thickness, dis);
+
+#endif
 
          try
          {
@@ -35,17 +54,18 @@ namespace SwainStrainTools
 
                foreach (Pipe p in Form_AddPipeInsulation.pipes)
                {
-                  try
+                  var ins = PipeInsulation.GetInsulationIds(doc, p.Id);
+
+                  if (ins.Count() == 0)
                   {
                      PipeInsulation pipeInsulation = PipeInsulation.Create(doc, p.Id, insulation.Id, thickness);
                   }
-                  catch
+                  else
                   {
                      foreach (var f in PipeInsulation.GetInsulationIds(doc, p.Id))
                      {
                         pinsidtodelete.Add(f);
                      }
-
                      ptoreinsulate.Add(p.Id);
                   }
                }
@@ -55,11 +75,13 @@ namespace SwainStrainTools
                t.Start("Add Insulation to pipe fittings");
                foreach (var p in Form_AddPipeInsulation.pipefittings)
                {
-                  try
+                  var ins = PipeInsulation.GetInsulationIds(doc, p.Id);
+
+                  if (ins.Count() == 0)
                   {
                      PipeInsulation pipeInsulation = PipeInsulation.Create(doc, p.Id, insulation.Id, thickness);
                   }
-                  catch
+                  else
                   {
                      foreach (var f in PipeInsulation.GetInsulationIds(doc, p.Id))
                      {
