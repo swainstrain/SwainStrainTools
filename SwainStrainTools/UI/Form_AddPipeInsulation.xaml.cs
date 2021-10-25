@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 
-namespace SwainStrainTools
+namespace SwainStrainTools.UI
 {
 
    public partial class Form_AddPipeInsulation : Window
@@ -22,7 +22,7 @@ namespace SwainStrainTools
       public static string insulation;
       public static double thickness;
 
-      public Form_AddPipeInsulation(UIApplication uiApp, ExternalEvent exEvent, ExternalEvent_AddPipeInsulation handler, UI.ViewModel vm)
+      public Form_AddPipeInsulation(UIApplication uiApp, ExternalEvent exEvent, ExternalEvent_AddPipeInsulation handler, UI.ViewModel_AddPipeIns vm)
       {
          InitializeComponent();
          _uiapp = uiApp;

@@ -9,11 +9,10 @@ using System.Collections.Generic; // List<>
 
 namespace SwainStrainTools.UI
 {
-   public class ViewModel : BaseViewModel
+   public class ViewModel_AddPipeIns : BaseViewModel
    {
       public RelayCommand WindowLoaded { get; set; }
       public RelayCommand WindowClosed { get; set; }
-      public RelayCommand ColorSettingsElement { get; set; }
       public RelayCommand CancelCommand { get; set; }
       public RelayCommand ApplyCommand { get; set; }
 
@@ -25,10 +24,9 @@ namespace SwainStrainTools.UI
       private List<DiameterNominal> _DNList;
       private string _SelectedDN;
 
-
       // Public Properties - Used for binding with the View
 
-      public static ViewModel Instance { get; set; }
+      public static ViewModel_AddPipeIns Instance { get; set; }
       public static Document Doc { get { return _doc; } set { _doc = value; } }
       public static UIApplication Uiapp { get { return _uiapp; } set { _uiapp = value; } }
       public static bool IsOpen { get; private set; } = false;
@@ -88,15 +86,15 @@ namespace SwainStrainTools.UI
          get { return (SelectedDN != null); }
       }
 
-      public ViewModel(UIApplication uiapp)
+      public ViewModel_AddPipeIns(UIApplication uiapp)
       {
          Instance = this;
          _uiapp = uiapp;
          _doc = _uiapp.ActiveUIDocument.Document;
 
          // Instantiate, get a list of countries from the Model
-         PipeSystem _Category = new PipeSystem();
-         PipeSystemsList = _Category.getPipeSystems(uiapp);
+         PipeSystem _PipeSystem = new PipeSystem();
+         PipeSystemsList = _PipeSystem.getPipeSystems(uiapp);
 
          try
          {
@@ -125,7 +123,6 @@ namespace SwainStrainTools.UI
          bool result = false;
          try
          {
-            //CollectSettingsJson();
             result = true;
          }
          catch (Exception ex)
