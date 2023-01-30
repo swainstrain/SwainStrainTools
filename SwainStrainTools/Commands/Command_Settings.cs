@@ -8,13 +8,15 @@ namespace SwainStrainTools
 {
    [Autodesk.Revit.Attributes.Transaction(Autodesk.Revit.Attributes.TransactionMode.Manual)]
    [Autodesk.Revit.Attributes.Regeneration(Autodesk.Revit.Attributes.RegenerationOption.Manual)]
-   public class Command_AddDuctInsulation : IExternalCommand
+
+   public class Command_Settings : IExternalCommand
    {
       public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
       {
          try
          {
-            ExternalApplication.thisApp.ShowForm_AddDuctInsulation(commandData.Application);
+            ExternalApplication.thisApp.ShowForm_LicenseKey();
+
             return Result.Succeeded;
          }
          catch (Exception ex)
@@ -25,20 +27,17 @@ namespace SwainStrainTools
       }
    }
 
-   public class Command_AddDuctInsulation_Availability : IExternalCommandAvailability
+   public class Command_Settings_Availability : IExternalCommandAvailability
    {
       public bool IsCommandAvailable(UIApplication applicationData, CategorySet selectedCategories)
       {
-         if (applicationData.ActiveUIDocument.Document != null && ExternalApplication.VALID)
-         {
-            return true;
-         }
+         //if (Properties.Settings.Default.LicenseKEY != "LicenseKEYValue")
+         //{
+         //   return false;
+         //}
 
-         return false;
+         return true;
       }
    }
 
 }
-
-
-

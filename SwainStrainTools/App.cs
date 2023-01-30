@@ -11,6 +11,7 @@ using System.Security.Cryptography;
 using System.Security;
 using System.Collections;
 using System.Text;
+using System.Windows.Forms;
 
 
 namespace SwainStrainTools
@@ -20,50 +21,75 @@ namespace SwainStrainTools
       public static ExternalApplication thisApp = new ExternalApplication();
       public static Form_AddPipeInsulation MyForm_AddPipeInsulation;
       public static Form_AddDuctInsulation MyForm_AddDuctInsulation;
+      public static Form_Settings MyForm_Settings;
       public System.Windows.Window Window = new System.Windows.Window();
 
       public static ExternalEvent_AddPipeInsulation Handler { get; set; } = null;
       public static ExternalEvent ExEvent { get; set; } = null;
 
+      public static bool VALID = false;
+      public static bool FLOATING =false;
+      public static bool ISACTIVE =false;
+
+
       public Result OnStartup(UIControlledApplication application)
       {
-         Program.ActivateMachine();
+         //Program.ActivateMachine();
 
-         Program.ValidateLicense();
-
-         if (Program.VALID)
+         if (Properties.Settings.Default.LicenseKEY != "" && Properties.Settings.Default.LicenseID != "" && result1 != "" && result2 != "")
          {
-            //Create Ribbon Tab & Panel
-            application.CreateRibbonTab("SwainStrain");
-            RibbonPanel panel = application.CreateRibbonPanel("SwainStrain", "Insulation");
-            string path = Assembly.GetExecutingAssembly().Location;
-            var directory = Path.GetDirectoryName(path);
-
-            //Create Buttons
-            PushButtonData button1 = new PushButtonData("Button1", "Add Pipe" + Environment.NewLine + "  Insulation  ", path, "SwainStrainTools.Command_AddPipeInsulation");
-            PushButtonData button2 = new PushButtonData("Button2", "Add Duct" + Environment.NewLine + "  Insulation  ", path, "SwainStrainTools.Command_AddDuctInsulation");
-
-            BitmapSource bitmap1 = GetEmbeddedImage("SwainStrainTools.Images.insulationpipe.png");
-            button1.Image = bitmap1;
-            button1.LargeImage = bitmap1;
-            button1.ToolTip = "Tool to add pipe insulation";
-            panel.AddItem(button1);
-
-            BitmapSource bitmap2 = GetEmbeddedImage("SwainStrainTools.Images.insulationduct.png");
-            button2.Image = bitmap2;
-            button2.LargeImage = bitmap2;
-            button2.ToolTip = "Tool to add duct insulation";
-            panel.AddItem(button2);
-
+            try
+            {
+               Program.ValidateLicenseByKey();
+               Program.ActivateMachine();
+               Program.ValidateLicenseByKey();
+            }
+            catch
+            {
+               VALID = false;
+               FLOATING = false;
+               ISACTIVE = false;
+            }
          }
-
          else
          {
-            Program.DeactivateMachine();
+            VALID = false;
+            FLOATING = false;
+            ISACTIVE = false;
+
          }
+
+         //Create Ribbon Tab & Panel
+         application.CreateRibbonTab("SwainStrain");
+         RibbonPanel panel = application.CreateRibbonPanel("SwainStrain", "Insulation");
+         string path = Assembly.GetExecutingAssembly().Location;
+         var directory = Path.GetDirectoryName(path);
+
+         //Create Buttons
+         PushButtonData button1 = new PushButtonData("Button1", "Add Pipe" + Environment.NewLine + "  Insulation  ", path, "SwainStrainTools.Command_AddPipeInsulation");
+         PushButtonData button2 = new PushButtonData("Button2", "Add Duct" + Environment.NewLine + "  Insulation  ", path, "SwainStrainTools.Command_AddDuctInsulation");
+         PushButtonData button3 = new PushButtonData("Button3", "Settings", path, "SwainStrainTools.Command_Settings");
+
+         BitmapSource bitmap1 = GetEmbeddedImage("SwainStrainTools.Images.insulationpipe.png");
+         button1.Image = bitmap1;
+         button1.LargeImage = bitmap1;
+         button1.ToolTip = "Tool to add pipe insulation";
+         button1.AvailabilityClassName = "SwainStrainTools.Command_AddDuctInsulation_Availability";
+         panel.AddItem(button1);
+
+         BitmapSource bitmap2 = GetEmbeddedImage("SwainStrainTools.Images.insulationduct.png");
+         button2.Image = bitmap2;
+         button2.LargeImage = bitmap2;
+         button2.ToolTip = "Tool to add duct insulation";
+         button2.AvailabilityClassName = "SwainStrainTools.Command_AddDuctInsulation_Availability";
+         panel.AddItem(button2);
+
+         button3.AvailabilityClassName= "SwainStrainTools.Command_Settings_Availability";
+         panel.AddItem(button3);
 
          MyForm_AddPipeInsulation = null;
          MyForm_AddDuctInsulation = null;
+         MyForm_Settings = null;
          thisApp = this;
 
          return Result.Succeeded;
@@ -71,7 +97,10 @@ namespace SwainStrainTools
 
       public Result OnShutdown(UIControlledApplication application)
       {
-         Program.DeactivateMachine();
+         if (VALID && FLOATING)
+         {
+            Program.DeactivateMachine();
+         }
 
          if (Window != null)
          {
@@ -97,6 +126,11 @@ namespace SwainStrainTools
          MyForm_AddDuctInsulation = new Form_AddDuctInsulation(uiapp, exEvent, handler, vm);
          MyForm_AddDuctInsulation.Show();
       }
+      public void ShowForm_LicenseKey()
+      {
+         MyForm_Settings = new Form_Settings();
+         MyForm_Settings.ShowDialog();
+      }
 
       public static BitmapSource GetEmbeddedImage(string name)
       {
@@ -113,18 +147,15 @@ namespace SwainStrainTools
       }
    }
 
-   class Program
+   public static class Program
    {
-      // This is your Keygen account ID.
-      //
-      // Available at: https://app.keygen.sh/settings
       const string KEYGEN_ACCOUNT_ID = "b611c793-06e0-4deb-94f0-8ae6984d937c";
-      const string LICENSE_KEY = "CC3F8C-4244CC-B53E25-9CA6EE-46A8C7-V3";
-      const string LICENSE_ID = "18a79427-f924-4c93-a05f-c165319f05c7";
+      //public static string LICENSE_KEY = Properties.Settings.Default.LicenseKEY;
+      //const string LICENSE_ID = "18a79427-f924-4c93-a05f-c165319f05c7";
       public static string FINGERPRINT = FingerPrint.Value();
-      public static bool VALID = false;
+      public static string licenseid="";
 
-      public static void ValidateLicense()
+      public static void ValidateLicenseByKey()
       {
          var keygen = new RestClient(string.Format("https://api.keygen.sh/v1/accounts/{0}", KEYGEN_ACCOUNT_ID));
          var request = new RestRequest("licenses/actions/validate-key", Method.POST);
@@ -135,7 +166,7 @@ namespace SwainStrainTools
          {
             meta = new
             {
-               key = LICENSE_KEY,
+               key = Properties.Settings.Default.LicenseKEY,
                scope = new
                {
                   fingerprint = FINGERPRINT
@@ -149,30 +180,39 @@ namespace SwainStrainTools
             var errors = (RestSharp.JsonArray)response.Data["errors"];
             if (errors != null)
             {
-               Console.WriteLine("[ERROR] Status={0} Errors={1}", response.StatusCode, errors);
+               //Console.WriteLine("[ERROR] Status={0} Errors={1}", response.StatusCode, errors);
+               MessageBox.Show(string.Format("[ERROR] Status={0} Errors={1} ", response.StatusCode, errors));
 
                Environment.Exit(1);
             }
          }
 
-         var license = (Dictionary<string, object>)response.Data["data"];
+         var data = (Dictionary<string, object>)response.Data["data"];
          var meta = (Dictionary<string, object>)response.Data["meta"];
+         licenseid = (string)data["id"];
 
          if ((bool)meta["valid"])
          {
-            //Console.WriteLine("[INFO] License={0} Valid={1} ValidationCode={2}", license["id"], meta["detail"], meta["constant"]);
-            VALID = true;
+            //MessageBox.Show(string.Format("[INFO] License={0} Valid={1} ValidationCode={2}", license["id"], meta["detail"], meta["constant"]));
+            ExternalApplication.VALID = true;
+            var attributes = (Dictionary<string, object>)data["attributes"];
+
+            if ((bool)attributes["floating"] == true)
+            {
+               ExternalApplication.FLOATING = true;
+            }
          }
+
          else
          {
-            //Console.WriteLine(
+            //MessageBox.Show(string.Format(
             //  "[INFO] License={0} Invalid={1} ValidationCode={2}",
             //  license != null ? license["id"] : "N/A",
             //  meta["detail"],
             //  meta["constant"]
-            //);
-            VALID = false;
-
+            //));
+            ExternalApplication.VALID = false;
+            ExternalApplication.ISACTIVE = false;
          }
       }
 
@@ -183,7 +223,7 @@ namespace SwainStrainTools
 
          request.AddHeader("Content-Type", "application/vnd.api+json");
          request.AddHeader("Accept", "application/vnd.api+json");
-         request.AddHeader("Authorization", string.Format("License {0}", LICENSE_KEY));
+         request.AddHeader("Authorization", string.Format("License {0}", Properties.Settings.Default.LicenseKEY));
 
          request.AddJsonBody(new
          {
@@ -193,9 +233,8 @@ namespace SwainStrainTools
                attributes = new
                {
                   fingerprint = FINGERPRINT,
-                  platform = "macOS",
-                  name = "Office MacBook Pro"
                },
+
                relationships = new
                {
                   license = new
@@ -203,7 +242,7 @@ namespace SwainStrainTools
                      data = new
                      {
                         type = "licenses",
-                        id = LICENSE_ID
+                        id = Program.licenseid
                      }
                   }
                }
@@ -212,6 +251,14 @@ namespace SwainStrainTools
 
          var response = keygen.Execute(request);
 
+         if (response.IsSuccessful)
+         {
+            ExternalApplication.ISACTIVE = true;
+         }
+         else
+         {
+            ExternalApplication.ISACTIVE = false;
+         }
       }
 
       public static void DeactivateMachine()
@@ -223,9 +270,11 @@ namespace SwainStrainTools
          );
 
          request.AddHeader("Accept", "application/vnd.api+json");
-         request.AddHeader("Authorization", string.Format("License {0}", LICENSE_KEY));
+         request.AddHeader("Authorization", string.Format("License {0}", Properties.Settings.Default.LicenseKEY));
 
          var response = keygen.Execute(request);
+
+
       }
 
    }
@@ -275,7 +324,7 @@ namespace SwainStrainTools
       }
       #region Original Device ID Getting Code
       //Return a hardware identifier
-      private static string identifier    (string wmiClass, string wmiProperty, string wmiMustBeTrue)
+      private static string identifier(string wmiClass, string wmiProperty, string wmiMustBeTrue)
       {
          string result = "";
          System.Management.ManagementClass mc =

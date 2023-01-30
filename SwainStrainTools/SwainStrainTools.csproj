@@ -36,7 +36,9 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '19_20|AnyCPU' ">
     <OutputPath>bin\2019_2020\</OutputPath>
-    <DefineConstants>R2019_2020</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;R2019_2020</DefineConstants>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '21_22|AnyCPU' ">
     <OutputPath>bin\2021_2022\</OutputPath>
@@ -82,9 +84,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\Command_AddDuctInsulation.cs" />
+    <Compile Include="Commands\Command_Settings.cs" />
     <Compile Include="ExternalEvents\ExternalEvent_AddDuctInsulation.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="UI\Form_AddDuctInsulation.xaml.cs">
       <DependentUpon>Form_AddDuctInsulation.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Form_Settings.xaml.cs">
+      <DependentUpon>Form_Settings.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\ViewModel_AddDuctIns.cs" />
     <Compile Include="Utilities\BaseViewModel.cs" />
@@ -98,7 +109,12 @@
     <Compile Include="UI\ViewModel_AddPipeIns.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Images\insulation.png" />
@@ -112,6 +128,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\Form_AddDuctInsulation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Form_Settings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

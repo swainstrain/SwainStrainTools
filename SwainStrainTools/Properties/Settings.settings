@@ -1,0 +1,12 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="SwainStrainTools.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="LicenseKEY" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Insert License KEY Value</Value>
+    </Setting>
+    <Setting Name="LicenseID" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Insert License ID Value</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
